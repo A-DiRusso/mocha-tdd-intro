@@ -1,4 +1,4 @@
-const User = require ('./user');
+const User = require ('./users');
 
 async function main() {
     debugger;
