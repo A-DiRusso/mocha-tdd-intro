@@ -121,7 +121,7 @@ describe('Review model', () => {
         //Use a plain for loop, so that the expeption does not
         //get swalloewed by a .forEach callback
         for (let z = 0; z < aBunchOfReviews.length; z++) {
-            expect(aBunchOfReviews[i]).to.be.an.instanceOf(Review);
+            expect(aBunchOfReviews[z]).to.be.an.instanceOf(Review);
         }
     });
 
