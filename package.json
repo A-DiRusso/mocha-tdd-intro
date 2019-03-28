@@ -1,0 +1,41 @@
+{
+  "name": "A-DiRusso_welp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "bcrypt": "^3.0.5",
+    "bcryptjs": "^2.4.3",
+    "pg-promise": "^8.6.4"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^6.0.2",
+    "nodemon": "^1.18.10"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "db:create": "createdb A-DiRusso_welp",
+    "db:init": "psql -f schema.sql A-DiRusso_welp && psql -f seed.sql A-DiRusso_welp",
+    "db:destroy":"dropdb A-DiRusso_welp",
+    "db:reset": "npm run db:destroy; npm run db:create && npm run db:init",
+    "test": "mocha",
+    "test:watch": "mocha -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A-DiRusso/mocha-tdd-intro.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/A-DiRusso/mocha-tdd-intro/issues"
+  },
+  "homepage": "https://github.com/A-DiRusso/mocha-tdd-intro#readme"
+}

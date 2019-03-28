@@ -8,7 +8,7 @@ const pgp = require('pg-promise')({
 //next, define the connectons options
 const options = {
     host: 'localhost',
-    database: 'restaurants-app'
+    database: 'A-DiRusso_welp'
 };
 
 //make a connection to the database specified by the optoins object
