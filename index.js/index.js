@@ -1,67 +1,70 @@
+// const http = require('http');
+const express = require('express'); // express is a function that will make an app for you :)
+const es6Renderer = require('express-es6-template-engine');
+const app = express(); // app is the server
 const http = require('http');
-
+const qureystring = require('querystring');
 const Restaurant = require('../models/restaurants');
 const User = require('../models/users');
+const Review = require('../models/reviews');
 
-const hostname = '127.0.0.1';
+// const hostname = '127.0.0.1';
 const port = 3000;
 
+app.engine('html', es6Renderer);
+app.set('view engine', 'html');
+app.set('views', 'views');
+app.use(express.urlencoded({ extended: true }));
 
-const server = http.createServer( async (req, res) => {
-    console.log(req.url);
-
-
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'application/json');
-    // res.end('Hello World\n');
-
-    if (req.url === '/restaurants') {
-        const allRestaurants = await Restaurant.getAll();
-        const restaurantsJSON = JSON.stringify(allRestaurants);
-        const method = req.method;
-
-        if (method === "GET") {
-            res.end(`{message: "What you trin' get?"}`);
-        } else if (method === "PUT") {
-            res.end(`{message: "What you trina' put?"}`);
-        } else if (method === "DELETE") {
-            res.end(`{message: "Not like this..."}`);
-        }
-
-        res.end(restaurantsJSON);
-    } else if (req.url.startsWith("/users")) {
-        const method = req.method;
-
-        if (method === "GET") {
-            const parts = req.url.split("/");
-            console.log(parts);
-            if (parts.length === 2) {
-                const allUsers = await User.getAll();
-                const usersJSON = JSON.stringify(allUsers);
-
-                res.end(usersJSON);
-            } else if (parts.length === 3) {
-                const userId = parts[2];
-                const theUser = await User.getById(userId);
-                const userJSON = JSON.stringify(theUser);
-
-                res.end(userJSON);
-            } else {
-                res.statusCode = 404;
-                res.end('Resource not found.');
-            }
-        } else if (method === "POST") {
-            res.end(`{message: "It sounds like you would like to create"}`);
-        } else if (method === "PUT") {
-            res.end(`{message: "You wanna update don't you.}`);
-        } else if (method === "DELETE") {
-            res.end(`{message: "rm the user"}`);
-        }
-    } else {
-        res.end(`{message: "Thank you for your patronage. Please send bitcoin!}`);
-    }
+app.get('/login', (req, res) => {
+    // res.send('This is the login form');
+    res.render('login-form');
+});
+app.post('/login', (req, res) => {
+    console.log(req.body.email);
+    console.log(req.body.password);
+    res.send('anything');
 });
 
-server.listen(port, hostname, () => {
-    console.log(`Server is running at http://${hostname}:${port}`);
+
+
+app.get('/', (req, res) => {res.send(`Welcome to Welp - an app:)`)})
+
+app.get('/restaurants', async (req, res) => {
+    const allRestaurants = await Restaurant.getAll();
+    //res.json will do two thing 1. converts js to json string 2. it puts 
+    // the correct content type header on the responce 
+    res.json(allRestaurants);
+});
+
+app.get('/users', async (req, res) => {
+    const allUsers = await User.getAll();
+    res.json(allUsers);
+});
+
+app.get('/reviews', async (req, res) => {
+    const allReviews = await Review.getAll();
+    res.json(allReviews);
+
+});
+
+app.get('/users/:id', async (req, res) => {
+    //how to grab a piece out req.pramas(or any object)
+    //this is know as destructuring 
+    const {id} = req.pramas;
+    const theUser = await User.getById(id);
+    res.json(theUser);
+});
+
+app.get('/review/:id', async (req, res) => {
+    const {id} = req.params;
+     const aReview = await Review.getReviewContent(id);
+     res.json(aReview);
+});
+
+
+
+
+app.listen(port, () => {
+    console.log(`Server is running on PORT: ${port}`);
 });

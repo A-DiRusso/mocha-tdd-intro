@@ -14,6 +14,16 @@ class Review {
         this.user_id = user_id;
     }
 
+    static getReviewContent(id) {
+        return db.one(`select * from reviews where id=${id}`)
+            .then((reviewData) => {
+                const reviewContent = new Review(
+                                         reviewData.content
+                )
+                return reviewContent;
+            })
+    }
+
     static getById(id) {
         return db.one(`select * from reviews where id=${id}`)
             .then((reviewData) => {

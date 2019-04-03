@@ -9,6 +9,8 @@
   "dependencies": {
     "bcrypt": "^3.0.5",
     "bcryptjs": "^2.4.3",
+    "express": "^4.16.4",
+    "express-es6-template-engine": "^2.1.7",
     "pg-promise": "^8.6.4"
   },
   "devDependencies": {
@@ -22,7 +24,7 @@
     "dev": "nodemon index.js",
     "db:create": "createdb A-DiRusso_welp",
     "db:init": "psql -f schema.sql A-DiRusso_welp && psql -f seed.sql A-DiRusso_welp",
-    "db:destroy":"dropdb A-DiRusso_welp",
+    "db:destroy": "dropdb A-DiRusso_welp",
     "db:reset": "npm run db:destroy; npm run db:create && npm run db:init",
     "test": "mocha",
     "test:watch": "mocha -w"

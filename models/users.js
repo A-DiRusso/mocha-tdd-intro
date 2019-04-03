@@ -1,5 +1,7 @@
 // Bring in the database connection
 const db = require('./conn');
+const Reviews = require('./reviews');
+// const bycrpt = require('bcyrptjs');
 
 //Need a User class
 //Classes should start with an unppercase letter
@@ -15,7 +17,12 @@ class User {
         this.password = password;
     }
 
-
+    static getAll() {
+        return db.any(`select * from users usr`)
+            .catch(() => {
+                return null;
+            });
+    }
     //"static" means that the function is something
     // the class can do but an instance cannot
     static getById(id) {
@@ -38,6 +45,10 @@ class User {
             })
     }
 
+    static countTheUsers() {
+        return db.result(`select max(id) from users`)
+    }
+   
     // no 'static' since this is an 'instance method'
     //(It belongs to the indvidual instance)
     save() {
@@ -55,7 +66,32 @@ class User {
 
     // get all reviews written by this user
     getReviews() {
+        return db.any(`select * from reviews where user_id = ${this.id}`)
+            .then((arrayOfReviewData) => {
+                const arrayOfReviewInstances = [];
+                arrayOfReviewData.forEach((data) => {
+                    const newInstance = new Reviews(
+                                                    data.id,
+                                                    data.score,
+                                                    data,content,
+                                                    data.restaurant_id,
+                                                    data.user_id
+                    );
+                    arrayOfReviewInstances.push(newInstance);
+                })
+                return arrayOfReviewInstances;
+            });
+    }
+    
 
+    setPassword(newPassword) {
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(newPassword, salt);
+        this.password = hash;
+    }
+
+    checkPassword(aPassword){
+        return bcrypt.compareSync(aPassword, this.password);
     }
 
 }   
